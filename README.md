@@ -10,4 +10,4 @@ Originally forked from shiguodong/dbscan
 ##TODO
 
 1. Could a points.size x points.size array be built to identify these clusters?
-	- Running this calculation once is an O(n<sup>^2</sup>) issue, but it could be relatively quick.
+	- Running this calculation once is an O(n<sup>2</sup>) issue, but it could be relatively quick.
