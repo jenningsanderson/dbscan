@@ -1,24 +1,40 @@
+# DB Scan
+#
+# Modified by TJA July 31, 2014
+#
+# Main modification is to use Rgeo Point to be geospatially aware.
+#
+#
+
+#Original Header:
 ####################################################
 # shiguodong, June 2011
 # References:
 #   1. see also wikipedia entry (this implementation is similar to
 #      their pseudo code): http://en.wikipedia.org/wiki/DBSCAN
 ####################################################
+
 module DbScan
 	def self.included(base)
 		base.extend(ClassMethods)
 	end
+
 	module ClassMethods
+
 		def dbscan(points, epsilon=0.05, min_pts=2)
 			@points,@epsilon,@min_pts = points,epsilon,min_pts
 			init_point
 			_dbscan
 		end
+
+
 		def init_point
 			return @points if (!@points.is_a? Array) or (@points.size<2)
 			@new_points = []
 			@points.each_with_index{|point,i|@new_points.push(Point.new(point))}
 		end
+
+
 
 		def _dbscan
 			clusters = {}     
@@ -58,12 +74,18 @@ module DbScan
 			end
 			return neighbours
 		end
+		
 		def distance(p1,p2)
-			raise "Error" if p1.size != p2.size
-			sum = 0
-			(0...p1.size).each{|i| sum+=(p1[i]-p2[i])**2}
-			Math.sqrt(sum)
+
+			# raise "Error" if p1.size != p2.size
+			# sum = 0
+			# (0...p1.size).each{|i| sum+=(p1[i]-p2[i])**2}
+			# Math.sqrt(sum)
+			
+			p1.distance(p2) #Using the Rgeo distance calculation for now (Could be slower...)
 		end
+		
+
 		def add_connected(neighbours,current_cluster)
 			cluster_points = []
 			neighbours.each do  |point|
